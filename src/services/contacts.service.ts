@@ -15,4 +15,8 @@ export class ContactsService {
     const contact = this.contactsRepository.create(createContactDto);
     return this.contactsRepository.save(contact);
   }
+
+  async findAll(): Promise<Contact[]> {
+    return this.contactsRepository.find();
+  }
 }
