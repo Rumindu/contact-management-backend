@@ -14,13 +14,16 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      forbidUnknownValues: true,
+      stopAtFirstError: false,
     }),
   );
 
-  // Register global exception filter
-  app.useGlobalFilters(new GlobalExceptionFilter());
-
   const configService = app.get(ConfigService);
+  
+  // Register global exception filter with config service
+  app.useGlobalFilters(new GlobalExceptionFilter(configService));
+
   const port = configService.get<AppConfiguration['port']>('port', 4000);
 
   await app.listen(port);
