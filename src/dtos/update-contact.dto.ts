@@ -1,5 +1,10 @@
-import { IsString, IsEmail, IsOptional, IsNotEmpty } from 'class-validator';
-import { IsPhoneNumber } from '../validators/phone-number.decorator';
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsNotEmpty,
+  Matches,
+} from 'class-validator';
 
 export class UpdateContactDto {
   @IsString({ message: 'Name must be a string' })
@@ -11,6 +16,11 @@ export class UpdateContactDto {
   email: string;
 
   @IsOptional()
-  @IsPhoneNumber({ message: 'Phone number is invalid' })
+  @Matches(
+    /^\+?[0-9]{1,4}?[-.\s]?\(?[0-9]{1,3}?\)?[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,9}$/,
+    {
+      message: 'Phone number is invalid',
+    },
+  )
   phone?: string;
 }
