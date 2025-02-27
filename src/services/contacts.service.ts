@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contact } from '../entities/contact.entity';
 import { CreateContactDto } from '../dtos/create-contact.dto';
+import { UpdateContactDto } from '../dtos/update-contact.dto';
 
 @Injectable()
 export class ContactsService {
@@ -25,5 +26,22 @@ export class ContactsService {
     if (result.affected === 0) {
       throw new NotFoundException(`Contact with ID ${id} not found`);
     }
+  }
+
+  async findOne(id: number): Promise<Contact> {
+    const contact = await this.contactsRepository.findOne({ where: { id } });
+    if (!contact) {
+      throw new NotFoundException(`Contact with ID ${id} not found`);
+    }
+    return contact;
+  }
+  
+  async update(
+    id: number,
+    updateContactDto: UpdateContactDto,
+  ): Promise<Contact> {
+    const contact = await this.findOne(id);
+    this.contactsRepository.merge(contact, updateContactDto);
+    return this.contactsRepository.save(contact);
   }
 }

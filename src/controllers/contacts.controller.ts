@@ -4,11 +4,13 @@ import {
   Body,
   Get,
   Delete,
+  Put,
   Param,
   HttpCode,
 } from '@nestjs/common';
 import { ContactsService } from '../services/contacts.service';
 import { CreateContactDto } from '../dtos/create-contact.dto';
+import { UpdateContactDto } from '../dtos/update-contact.dto';
 import { Contact } from '../entities/contact.entity';
 
 @Controller('contacts')
@@ -29,5 +31,10 @@ export class ContactsController {
   @HttpCode(204)
   remove(@Param('id') id: string) {
     return this.contactsService.remove(+id);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {
+    return this.contactsService.update(+id, updateContactDto);
   }
 }
