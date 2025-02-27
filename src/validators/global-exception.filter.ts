@@ -27,7 +27,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
       if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
-        // Use proper type casting instead of 'any'
         const typedResponse = exceptionResponse as HttpExceptionResponse;
         message = typedResponse.message || exception.message;
         error = typedResponse.error || 'Error';
