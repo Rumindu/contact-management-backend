@@ -8,6 +8,12 @@ export interface AppConfiguration {
     database: string;
     synchronize: boolean;
   };
+  cors: {
+    origin: string;
+    methods: string[];
+    allowedHeaders: string[];
+    credentials: boolean;
+  };
 }
 
 export default (): AppConfiguration => ({
@@ -19,5 +25,15 @@ export default (): AppConfiguration => ({
     password: process.env.DB_PASSWORD || 'postgres',
     database: process.env.DB_DATABASE || 'contact_management',
     synchronize: process.env.DB_SYNC === 'true' || true,
+  },
+  cors: {
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods: (
+      process.env.CORS_METHODS || 'GET,POST,PUT,DELETE,PATCH,OPTIONS'
+    ).split(','),
+    allowedHeaders: (
+      process.env.CORS_ALLOWED_HEADERS || 'Content-Type,Authorization,Accept'
+    ).split(','),
+    credentials: process.env.CORS_CREDENTIALS === 'true' || true,
   },
 });

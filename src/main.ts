@@ -20,7 +20,24 @@ async function bootstrap() {
   );
 
   const configService = app.get(ConfigService);
-  
+
+  // Define default CORS configuration
+  const defaultCorsConfig = {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    credentials: true,
+  };
+
+  const corsConfig =
+    configService.get<AppConfiguration['cors']>('cors') ?? defaultCorsConfig;
+  app.enableCors({
+    origin: corsConfig.origin,
+    methods: corsConfig.methods,
+    allowedHeaders: corsConfig.allowedHeaders,
+    credentials: corsConfig.credentials,
+  });
+
   // Register global exception filter with config service
   app.useGlobalFilters(new GlobalExceptionFilter(configService));
 
